@@ -131,14 +131,6 @@ public class SpiderJob implements Runnable{
 	
 }
 
-// html字符串匹配器
-class HTMLStringMatcher {
-	private char[] charArrayA, charArrayB; // 临时存储用的字符数组，二者长度一致，相互配合使用
-	private int currentCharArrayFlag; // 用于标记当前使用的字符串数组
-	private List<char[]> templateList; // 模板集合
-	private int maxTemplateSize; // 模板中最长的数组大小
-	
-}
 	
 	
 
