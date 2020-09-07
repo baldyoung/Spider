@@ -18,14 +18,14 @@ public class SpiderJob implements Runnable{
 	private String content;
 	private Socket socket;
 	private PrintStream outStream = out;
-	private OutputStream outputStream;
+	private StringMatcher stringMatcher;
 	private int statusFlag = 0; // {0 : 未执行, 1 : 运行中, desc : 用来控制输出流在运行时的不可变更}
 	private synchronized void setOutStream(PrintStream printStream) {
 		if (0 == statusFlag) {
 			this.outStream = printStream;
 		}
 	}
-	private SpiderJob(String method, String host, String targetURL, Integer port, String header, String content, Socket socket) {
+	private SpiderJob(String method, String host, String targetURL, Integer port, String header, String content, Socket socket, StringMatcher stringMatcher) {
 		this.method = method;
 		this.host = host;
 		this.targetURL = targetURL;
@@ -33,6 +33,7 @@ public class SpiderJob implements Runnable{
 		this.header = header;
 		this.content = content;
 		this.socket = socket;
+		this.stringMatcher = stringMatcher;
 	}
 	public List<String> getData() {
 		synchronized(this) {
@@ -50,12 +51,11 @@ public class SpiderJob implements Runnable{
             os.write(requestData.getBytes());
             InputStream is = this.socket.getInputStream();
 			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-			char[] chars = new char[1024];
-            int len = -1;
-			// 匹配算法
-            while ((len = reader.read(chars, 0, 1024)) != -1) {
-				outStream.println(String.valueOf(chars, 0, len));
-            }
+			BufferedReader bufferedReader = new BufferedReader(reader);
+			String line = null;
+			while(null != (line = bufferedReader.readLine())) {
+				stringMatcher.execute(line);
+			}
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,6 +68,8 @@ public class SpiderJob implements Runnable{
 	public void run() {
 		getData();
 	}
+	// 弃用！！！
+	@Deprecated
 	public static void main(String... args) throws Exception {
 		if (args.length < 0) {
 			return;
@@ -86,7 +88,7 @@ public class SpiderJob implements Runnable{
 		properties.getProperty("method"), 
 		properties.getProperty("url"),
 		header,
-		properties.getProperty("content")
+		properties.getProperty("content"),null
 		);
 		if (args.length > 1) {
 			sj.setOutStream(new PrintStream(new FileOutputStream(args[1])));
@@ -100,7 +102,7 @@ public class SpiderJob implements Runnable{
 	public static void exception() throws Exception {
 		exception("");
 	}
-	public static SpiderJob getInstance(String method, String URL, String header, String content) throws Exception {
+	public static SpiderJob getInstance(String method, String URL, String header, String content, StringMatcher stringMatcher) throws Exception {
 		URL = URL.toLowerCase();
 		// 协议端口判断
 		Integer port = null;
@@ -126,7 +128,7 @@ public class SpiderJob implements Runnable{
 		} else if(443 == port) {
 			socket = (SSLSocket)((SSLSocketFactory)SSLSocketFactory.getDefault()).createSocket(host, port);
 		}	
-		return new SpiderJob(method, host, URL, port, header, content, socket);
+		return new SpiderJob(method, host, URL, port, header, content, socket, stringMatcher);
 	}
 	
 }
