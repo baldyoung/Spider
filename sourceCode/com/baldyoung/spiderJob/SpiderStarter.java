@@ -11,10 +11,10 @@ public class SpiderStarter {
     public static void main(String... args) throws Exception {
 
         // user-agent配置
-        List<String> userAgentList = DataSourceUnit.getInstance(new FileInputStream("d:/workStation/project/Spider/resource/userAgents.data"), "utf-8").getData();
+        List<String> userAgentList = DataSourceUnit.getInstance(new FileInputStream("d:/idea/project/Spider/resource/userAgents.data"), "utf-8").getData();
         // userAgentList.forEach(cell -> out.println(cell));
         // 其他HTTP报文参数
-        FileInputStream fileInputStream = new FileInputStream("d:/workStation/project/Spider/resource/in.properties");
+        FileInputStream fileInputStream = new FileInputStream("d:/idea/project/Spider/resource/in.properties");
         Properties properties = new Properties();
         properties.load(fileInputStream);
         String header = properties.getProperty("header");
@@ -23,12 +23,12 @@ public class SpiderStarter {
         header = header + "cookie: " + properties.get("cookie") + "\r\n";
         String content = properties.getProperty("content");
         // 数据输出源的配置
-        FileOutputStream fileOutputStream = new FileOutputStream("d:/workStation/project/Spider/resource/out.data");
+        FileOutputStream fileOutputStream = new FileOutputStream("d:/idea/project/Spider/resource/out.data");
         // 数据处理器
         StringMatcher stringMatcher = getMatcher(fileOutputStream);
 
         // 批量发起HTTP请求
-        int i=0;
+        int i;
         for (i=0; i<93; i++) {
             String tempHeader = header + "User-Agent: " + userAgentList.get(0) + "\r\n";
             SpiderJob.getInstance(
@@ -38,6 +38,7 @@ public class SpiderStarter {
                     content,
                     stringMatcher
             ).getData();
+            out.println("item "+i);
         }
         for (String userAgent : userAgentList) {
             if (true) return;
@@ -50,7 +51,8 @@ public class SpiderStarter {
                     content,
                     stringMatcher
             ).getData();
-            Thread.sleep(3000);
+            out.println("item "+i++);
+            //Thread.sleep(3000);
             /*SpiderJob.getInstance(
                     "GET",
                     "https://static.zhipin.com/zhipin-geek/v308/web/geek/css/main.css",
@@ -80,10 +82,29 @@ public class SpiderStarter {
 
     public static String getXiaoShuoUrl() {
         pageIndex++;
-        return String.format("https://www.ranwen.la/files/article/104/104644/%d.html", 1162710+pageIndex);
+        return String.format("https://www.ranwen.la/files/article/104/104644/116271%d.html", +pageIndex);
     }
     public static StringMatcher getMatcher(OutputStream outputStream) {
         StringMatcher stringMatcher = new StringMatcher(outputStream);
+        stringMatcher.addTemplate(null, "<h1>(.{1,})</h1>", new StringMatcher.TargetTemplate() {
+            @Override
+            public String process(String string) {
+                String[] stringArray = string.split(">");
+                String result = stringArray[1];
+                result = result.substring(0, result.length()-4);
+                return "\t\t"+result+"\n";
+            }
+        });
+        stringMatcher.addTemplate(null, "<p>(.{1,})</p>", new StringMatcher.TargetTemplate() {
+            @Override
+            public String process(String string) {
+                String[] stringArray = string.split(">");
+                String result = stringArray[1];
+                result = result.substring(0, result.length()-4);
+                return "\t"+result+"\n";
+            }
+        });
+        if (true) return stringMatcher;
         stringMatcher.addTemplate("{title", "gv-title(.)>(.{20,100})>(.{2,}?)<", new StringMatcher.TargetTemplate() {
             @Override
             public String process(String string) {

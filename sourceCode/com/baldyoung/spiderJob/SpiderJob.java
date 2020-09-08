@@ -53,12 +53,12 @@ public class SpiderJob implements Runnable{
             OutputStream os = this.socket.getOutputStream();
             os.write(requestData.getBytes());
             InputStream is = this.socket.getInputStream();
-			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+			InputStreamReader reader = new InputStreamReader(is, "GBK");
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			String line;
 			while(null != (line = bufferedReader.readLine())) {
 				if (null != stringMatcher) {
-					out.println("数据处理:"+line);
+					//out.println("数据处理:"+line);
 					stringMatcher.execute(line);
 				}
 			}
