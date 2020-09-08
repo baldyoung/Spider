@@ -45,16 +45,22 @@ public class SpiderJob implements Runnable{
 		this.header + 
 		"\r\n" + 
 		this.content;
-		// out.println("+++++++++++++++++++++++++");
+		//out.println("#########################");
+		// out.println("URL"+targetURL);
+		//out.println(requestData);
+		//out.println("+++++++++++++++++++++++++");
 		try {
             OutputStream os = this.socket.getOutputStream();
             os.write(requestData.getBytes());
             InputStream is = this.socket.getInputStream();
 			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
 			BufferedReader bufferedReader = new BufferedReader(reader);
-			String line = null;
+			String line;
 			while(null != (line = bufferedReader.readLine())) {
-				stringMatcher.execute(line);
+				if (null != stringMatcher) {
+					out.println("数据处理:"+line);
+					stringMatcher.execute(line);
+				}
 			}
             socket.close();
         } catch (IOException e) {

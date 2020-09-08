@@ -84,6 +84,9 @@ public class StringMatcher {
     public StringMatcher() {
         this(out, new LinkedList());
     }
+    public StringMatcher(OutputStream outputStream) {
+        this(outputStream, new LinkedList<>());
+    }
 
     public void addTemplate(String name, String regx, TargetTemplate targetTemplate) {
         targetTemplate.setName(name);
