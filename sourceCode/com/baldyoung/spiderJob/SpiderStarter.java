@@ -11,10 +11,10 @@ public class SpiderStarter {
     public static void main(String... args) throws Exception {
 
         // user-agent配置
-        List<String> userAgentList = DataSourceUnit.getInstance(new FileInputStream("d:/idea/project/Spider/resource/userAgents.data"), "utf-8").getData();
+        List<String> userAgentList = DataSourceUnit.getInstance(new FileInputStream("d:/workStation/project/Spider/resource/userAgents.data"), "utf-8").getData();
         // userAgentList.forEach(cell -> out.println(cell));
         // 其他HTTP报文参数
-        FileInputStream fileInputStream = new FileInputStream("d:/idea/project/Spider/resource/in.properties");
+        FileInputStream fileInputStream = new FileInputStream("d:/workStation/project/Spider/resource/in.properties");
         Properties properties = new Properties();
         properties.load(fileInputStream);
         String header = properties.getProperty("header");
@@ -23,7 +23,7 @@ public class SpiderStarter {
         header = header + "cookie: " + properties.get("cookie") + "\r\n";
         String content = properties.getProperty("content");
         // 数据输出源的配置
-        FileOutputStream fileOutputStream = new FileOutputStream("d:/idea/project/Spider/resource/out.data");
+        FileOutputStream fileOutputStream = new FileOutputStream("d:/workStation/project/Spider/resource/out.txt");
         // 数据处理器
         StringMatcher stringMatcher = getMatcher(fileOutputStream);
 
@@ -82,7 +82,7 @@ public class SpiderStarter {
 
     public static String getXiaoShuoUrl() {
         pageIndex++;
-        return String.format("https://www.ranwen.la/files/article/104/104644/116271%d.html", +pageIndex);
+        return String.format("http://www.jjwxc.net/onebook.php?novelid=622739&chapterid=%d", +pageIndex);
     }
     public static StringMatcher getMatcher(OutputStream outputStream) {
         StringMatcher stringMatcher = new StringMatcher(outputStream);

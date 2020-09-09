@@ -74,7 +74,6 @@ public class StringMatcher {
         public abstract String process(String string);
 
     }
-    private String stringData;
     private List<TargetTemplate> templateList;
     private OutputStream outputStream;
     public StringMatcher(OutputStream outputStream, List<TargetTemplate> templateList) {
@@ -109,7 +108,6 @@ public class StringMatcher {
             } else {
                 result += ", " + temp;
             }
-            //out.println("times "+i+" "+result);
         }
 
         if (null != result) {

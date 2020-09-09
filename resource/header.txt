@@ -1,0 +1,6 @@
+accept-encoding:
+Connection: close
+accept-language: zh-CN,zh
+Accept: text/html,application/xhtml+xml,application/xml
+Referer: http://top.sogou.com/hot/shishi_2.html
+Upgrade-Insecure-Requests: 1
