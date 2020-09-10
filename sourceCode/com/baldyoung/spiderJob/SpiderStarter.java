@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static java.lang.System.*;
-
+@Deprecated
 public class SpiderStarter {
     public static void main(String... args) throws Exception {
 

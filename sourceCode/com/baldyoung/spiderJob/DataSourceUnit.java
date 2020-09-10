@@ -3,7 +3,7 @@ package com.baldyoung.spiderJob;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
-
+@Deprecated
 public class DataSourceUnit {
     private BufferedReader bufferedReader;
     private DataSourceUnit(InputStreamReader inputStreamReader) {

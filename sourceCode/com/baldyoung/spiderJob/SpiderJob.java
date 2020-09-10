@@ -9,6 +9,7 @@ import java.util.*;
 URL路径分隔符采用/
 
 **/
+@Deprecated
 public class SpiderJob implements Runnable{
 	private String method;
 	private String targetURL;

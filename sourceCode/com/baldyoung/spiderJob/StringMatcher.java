@@ -12,6 +12,7 @@ import static java.lang.System.out;
 /**
  * 字符串集中匹配器
  */
+@Deprecated
 public class StringMatcher {
     /**
      * 模板处理类
