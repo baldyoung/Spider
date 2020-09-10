@@ -39,6 +39,7 @@ public class LineStringTemplate {
             // 这里只取了第一个，有所不妥！
             temp = m.group(0);
             result = (null == processObject) ? temp : processObject.process(temp);
+            break;
         }
         return result;
     }

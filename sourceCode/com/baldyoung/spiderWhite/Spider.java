@@ -25,13 +25,14 @@ public class Spider {
      * @throws Exception
      */
     public void execute(HttpRequestUnit httpRequestUnit, OutputStream outputStream) throws Exception {
+        String httpRequestData = httpRequestUnit.packageToHttpRequestData();
         if (80 == httpRequestUnit.port) {
             socket = new Socket(httpRequestUnit.host, httpRequestUnit.port);
         } else if (443 == httpRequestUnit.port) {
             socket = SSLSocketFactory.getDefault().createSocket(httpRequestUnit.host, httpRequestUnit.port);
         }
         OutputStream os = this.socket.getOutputStream();
-        os.write(httpRequestUnit.packageToHttpRequestData().getBytes());
+        os.write(httpRequestData.getBytes());
         InputStream is = this.socket.getInputStream();
         // 通过数据处理器，处理数据流
         matchAble.match(is, outputStream);

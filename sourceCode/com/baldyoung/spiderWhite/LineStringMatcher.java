@@ -62,12 +62,16 @@ public class LineStringMatcher implements MatchAble {
         String result = "";
         int i=0;
         while(null != (line = bufferedReader.readLine())) {
+            // System.out.println(line);
             temp = null;
             for (LineStringTemplate template : this.templateList) {
                 temp = template.dispose(line);
                 if (null != temp) {
                     break;
                 }
+            }
+            if (null == temp) {
+                continue;
             }
             i ++;
             result += (1 == i) ? "{" : ",";
